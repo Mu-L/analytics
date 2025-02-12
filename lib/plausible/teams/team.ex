@@ -29,7 +29,7 @@ defmodule Plausible.Teams.Team do
     field :setup_complete, :boolean, default: false
     field :setup_at, :naive_datetime
 
-    embeds_one :grace_period, Plausible.Auth.GracePeriod, on_replace: :update
+    embeds_one :grace_period, Plausible.Teams.GracePeriod, on_replace: :update
 
     has_many :sites, Plausible.Site
     has_many :team_memberships, Plausible.Teams.Membership
@@ -63,9 +63,7 @@ defmodule Plausible.Teams.Team do
     |> validate_required(:name)
   end
 
-  def setup_changeset(team) do
-    now = NaiveDateTime.utc_now(:second)
-
+  def setup_changeset(team, now \\ NaiveDateTime.utc_now(:second)) do
     team
     |> change(
       setup_complete: true,
